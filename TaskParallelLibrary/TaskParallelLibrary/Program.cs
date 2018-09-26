@@ -7,7 +7,7 @@ namespace TaskParallelLibrary
     {
         static void Main(string[] args)
         {
-            new Waiting().WaitForAny();
+            Signalization.SyncWithSemaphore();
             Console.ReadKey();
         }
     }
