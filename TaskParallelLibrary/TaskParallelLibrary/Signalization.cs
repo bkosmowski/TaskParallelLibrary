@@ -6,6 +6,7 @@ namespace TaskParallelLibrary
 {
     public class Signalization
     {
+        //konsument producent przykład
         public static void SyncWithSemaphore()
         {
             var semaphoreSlim = new SemaphoreSlim(0, 10);
@@ -102,7 +103,7 @@ namespace TaskParallelLibrary
                     Thread.Sleep(random.Next(1000, 3000));
 
                     Console.WriteLine($"Current countdown value is {countdownEvent.CurrentCount}");
-
+                    //Drukowac numer tasku i watku
                     countdownEvent.Signal();
                 });
             }

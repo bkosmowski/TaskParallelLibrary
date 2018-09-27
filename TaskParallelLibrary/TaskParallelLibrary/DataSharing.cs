@@ -227,7 +227,7 @@ namespace TaskParallelLibrary
             {
                 Balance = 0;
             }
-
+            //Dodac pomiary pomiedzy innymi sposobami
             public void Deposit(int amount)
             {
                 Interlocked.Add(ref _balance, amount);
