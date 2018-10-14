@@ -23,7 +23,7 @@ namespace TaskParallelLibrary
                     readerWriterLockSlim.EnterReadLock();
 
                     Console.WriteLine($"Entered read lock, x = {x}, pausing for 5 seconds");
-                    Thread.Sleep(TimeSpan.FromSeconds(5));
+                    Task.Delay(TimeSpan.FromSeconds(5));
 
                     readerWriterLockSlim.ExitReadLock();
 
@@ -53,7 +53,7 @@ namespace TaskParallelLibrary
                     readerWriterLockSlim.EnterReadLock();
 
                     Console.WriteLine($"Entered read lock, x = {x}, pausing for 5 seconds");
-                    Thread.Sleep(TimeSpan.FromSeconds(5));
+                    Task.Delay(TimeSpan.FromSeconds(5));
 
                     readerWriterLockSlim.ExitReadLock();
 

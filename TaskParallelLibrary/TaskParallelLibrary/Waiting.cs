@@ -24,13 +24,13 @@ namespace TaskParallelLibrary
                 for (var i = 0; i < 5; i++)
                 {
                     _cancellationTokenSource.Token.ThrowIfCancellationRequested();
-                    Thread.Sleep(1000);
+                    Task.Delay(1000);
                 }
             });
 
             _task2 = new Task(() =>
             {
-                Thread.Sleep(3000);
+                Task.Delay(3000);
                 Console.WriteLine("Second task is done!");
             }, _cancellationTokenSource.Token);
         }

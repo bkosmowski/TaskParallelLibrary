@@ -45,7 +45,7 @@ namespace TaskParallelLibrary
                 {
                     composed.Token.ThrowIfCancellationRequested();
                     Console.WriteLine(index);
-                    Thread.Sleep(TimeSpan.FromSeconds(1));
+                    Task.Delay(TimeSpan.FromSeconds(1));
                     index--;
                 }
 
@@ -81,7 +81,7 @@ namespace TaskParallelLibrary
                     }
 
                     Console.WriteLine($"{index++}");
-                    Thread.Sleep(1000);
+                    Task.Delay(1000);
                 }
             }, cancellationTokenSource.Token);
 
@@ -89,7 +89,7 @@ namespace TaskParallelLibrary
 
             cancellationTokenSource.Cancel();
 
-            Thread.Sleep(1000);
+            Task.Delay(1000);
 
             Console.WriteLine($"Status of soft canceled task is {task.Status}");
         }
@@ -114,7 +114,7 @@ namespace TaskParallelLibrary
 
                     Console.WriteLine($"{index}");
                     index++;
-                    Thread.Sleep(1000);
+                    Task.Delay(1000);
                 }
             }, cancellationTokenSource.Token);
 
@@ -122,7 +122,7 @@ namespace TaskParallelLibrary
 
             cancellationTokenSource.Cancel();
 
-            Thread.Sleep(1000);
+            Task.Delay(1000);
 
             Console.WriteLine($"Status of hard canceled task is {task.Status}");
         }

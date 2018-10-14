@@ -42,7 +42,7 @@ namespace TaskParallelLibrary
                 for (int index = 0; index < 30; index++)
                 {
                     cancellationTokenSource.Token.ThrowIfCancellationRequested();
-                    Thread.Sleep(100);
+                    Task.Delay(100);
                 }
 
                 Console.WriteLine("Water is ready");
@@ -72,7 +72,7 @@ namespace TaskParallelLibrary
                 for (int index = 0; index < 30; index++)
                 {
                     cancellationTokenSource.Token.ThrowIfCancellationRequested();
-                    Thread.Sleep(100);
+                    Task.Delay(100);
                 }
 
                 Console.WriteLine("Water is ready");
@@ -100,7 +100,7 @@ namespace TaskParallelLibrary
             {
                 tasks[index] = Task.Factory.StartNew(() =>
                 {
-                    Thread.Sleep(random.Next(1000, 3000));
+                    Task.Delay(random.Next(1000, 3000));
 
                     Console.WriteLine($"Current countdown value is {countdownEvent.CurrentCount}");
                     //Drukowac numer tasku i watku
@@ -128,11 +128,11 @@ namespace TaskParallelLibrary
             var water = Task.Factory.StartNew(() =>
             {
                 Console.WriteLine("Putting the kettle on");
-                Thread.Sleep(TimeSpan.FromSeconds(2));
+                Task.Delay(TimeSpan.FromSeconds(2));
                 barrier.SignalAndWait();
 
                 Console.WriteLine("Boiling water");
-                Thread.Sleep(TimeSpan.FromSeconds(3));
+                Task.Delay(TimeSpan.FromSeconds(3));
                 barrier.SignalAndWait();
 
                 Console.WriteLine("Putting the kettle away");
@@ -141,11 +141,11 @@ namespace TaskParallelLibrary
             var cup = Task.Factory.StartNew(() =>
             {
                 Console.WriteLine("Taking the nicest tea cup");
-                Thread.Sleep(TimeSpan.FromSeconds(1));
+                Task.Delay(TimeSpan.FromSeconds(1));
                 barrier.SignalAndWait();
 
                 Console.WriteLine("Adding tea");
-                Thread.Sleep(TimeSpan.FromSeconds(1));
+                Task.Delay(TimeSpan.FromSeconds(1));
                 barrier.SignalAndWait();
 
                 Console.WriteLine("Adding sugar");
