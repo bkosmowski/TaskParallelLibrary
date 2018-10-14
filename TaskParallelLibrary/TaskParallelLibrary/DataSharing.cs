@@ -8,6 +8,39 @@ namespace TaskParallelLibrary
 {
     public class DataSharing
     {
+        public static void TestLocks()
+        {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            for (var index = 0; index < 10000; index++)
+            {
+                DataSharing.SyncOperationOnBankAccountWithSpinLock();
+            }
+
+            stopwatch.Stop();
+            Console.WriteLine($"Spin lock elapsed time {stopwatch.ElapsedMilliseconds} ms");
+
+            stopwatch.Reset();
+            stopwatch.Start();
+            for (var index = 0; index < 10000; index++)
+            {
+                DataSharing.SyncOperationOnBankAccountWithLock();
+            }
+
+            stopwatch.Stop();
+            Console.WriteLine($"Lock elapsed time {stopwatch.ElapsedMilliseconds} ms");
+
+            stopwatch.Reset();
+            stopwatch.Start();
+            for (var index = 0; index < 10000; index++)
+            {
+                DataSharing.SyncOperationOnBankAccountWithInterlocked();
+            }
+
+            stopwatch.Stop();
+            Console.WriteLine($"Interlocked elapsed time {stopwatch.ElapsedMilliseconds} ms");
+        }
+
         public static void SyncWithReaderWriterLocks()
         {
             var x = 0;
@@ -138,7 +171,7 @@ namespace TaskParallelLibrary
 
             Task.WaitAll(tasks.ToArray());
 
-            Debug.WriteLine($"Current balance on account is {bankAccount.Balance}");
+            // Debug.WriteLine($"Current balance on account is {bankAccount.Balance}");
         }
 
         class SpinLockBankAccount
@@ -210,7 +243,7 @@ namespace TaskParallelLibrary
 
             Task.WaitAll(new[] { task1, task2 });
 
-            Debug.WriteLine($"Current balance on account is {bankAccount.Balance}");
+            // Debug.WriteLine($"Current balance on account is {bankAccount.Balance}");
         }
 
         class InterlockedBankAccount
@@ -283,7 +316,7 @@ namespace TaskParallelLibrary
                 Console.WriteLine(ae);
             }
 
-            Debug.WriteLine($"Current balance on account is {bankAccount.Balance}");
+            // Debug.WriteLine($"Current balance on account is {bankAccount.Balance}");
         }
 
         class LockBankAccount

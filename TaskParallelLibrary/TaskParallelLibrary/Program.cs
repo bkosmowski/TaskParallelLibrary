@@ -7,7 +7,7 @@ namespace TaskParallelLibrary
     {
         static void Main(string[] args)
         {
-            Signalization.PrepareTeaWithBarrier();
+            DataSharing.TestLocks();
             Console.ReadKey();
         }
     }
