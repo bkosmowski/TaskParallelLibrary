@@ -7,7 +7,7 @@ namespace TaskParallelLibrary
     {
         static void Main(string[] args)
         {
-            DataSharing.TestLocks();
+            Processor.ShowThreadNumberInformation();
             Console.ReadKey();
         }
     }
