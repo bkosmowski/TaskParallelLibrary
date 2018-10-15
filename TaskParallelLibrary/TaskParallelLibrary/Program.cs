@@ -7,8 +7,18 @@ namespace TaskParallelLibrary
     {
         static void Main(string[] args)
         {
-            Processor.ShowThreadNumberInformation();
+            TestInCases(DataSharing.TestResetEvents);
             Console.ReadKey();
+        }
+
+        private static void TestInCases(Action<int> action)
+        {
+            var arrayOfCases = new[] {1, 10, 100};
+
+            foreach (var caseFromArray in arrayOfCases)
+            {
+                action(caseFromArray);
+            }
         }
     }
 }

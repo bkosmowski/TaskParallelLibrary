@@ -8,6 +8,222 @@ namespace TaskParallelLibrary
 {
     public class DataSharing
     {
+        public static void TestResetEvents(int numberOfAdds)
+        {
+            var stopwatch = new Stopwatch();
+
+            stopwatch.Start();
+
+            DataSharing.SyncOperationWithManualResetEvent(numberOfAdds);
+
+            stopwatch.Stop();
+
+            Console.WriteLine(
+                $"Usage of ManualResetEvent for {numberOfAdds} items took {stopwatch.ElapsedMilliseconds} ms");
+
+            stopwatch.Reset();
+
+            stopwatch.Start();
+
+            DataSharing.SyncOperationWithManualResetEventSlim(numberOfAdds);
+
+            stopwatch.Stop();
+
+            Console.WriteLine(
+                $"Usage of ManualResetEventSlim {numberOfAdds} items took {stopwatch.ElapsedMilliseconds} ms");
+
+            stopwatch.Reset();
+
+            stopwatch.Start();
+
+            DataSharing.SyncOperationWithAutoResetEvent(numberOfAdds);
+
+            stopwatch.Stop();
+
+            Console.WriteLine(
+                $"Usage of AutoResetEvent for {numberOfAdds} items took {stopwatch.ElapsedMilliseconds} ms");
+        }
+
+        private static void WriteWithSemaphore(int numberOfAdds)
+        {
+            var random = new Random(10000);
+            var resource = 10;
+            var semaphore = new Semaphore(0, 1);
+            var tasks = new List<Task>();
+            for (var index = 0; index < 1000000; index++)
+            {
+                tasks.Add(Task.Factory.StartNew(() =>
+                {
+                    semaphore.WaitOne();
+                    for (var i = 0; i < numberOfAdds; i++)
+                    {
+                        resource += random.Next(100);
+                    }
+                    semaphore.Release();
+                }));
+            }
+            Task.WaitAll(tasks.ToArray());
+        }
+
+        public static void TestReaderWriterLocks(int numberOfAdds)
+        {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            DataSharing.WriteWithReaderWriterLock(numberOfAdds);
+            stopwatch.Stop();
+            Console.WriteLine(
+                $"Usage of ReaderWriterLock for {numberOfAdds} items took {stopwatch.ElapsedMilliseconds} ms");
+            stopwatch.Reset();
+            stopwatch.Start();
+            DataSharing.WriteWithReaderWriterLockSlim(numberOfAdds);
+            stopwatch.Stop();
+            Console.WriteLine(
+                $"Usage of ReaderWriterLockSlim {numberOfAdds} items took {stopwatch.ElapsedMilliseconds} ms");
+        }
+
+        private static void WriteWithReaderWriterLockSlim(int numberOfAdds)
+        {
+            var random = new Random(10000);
+            var resource = 10;
+            var readerWriterLockSlim = new ReaderWriterLockSlim();
+            var tasks = new List<Task>();
+            for (var index = 0; index < 1000000; index++)
+            {
+                tasks.Add(Task.Factory.StartNew(() =>
+                {
+                    readerWriterLockSlim.EnterWriteLock();
+                    for (var i = 0; i < numberOfAdds; i++)
+                    {
+                        resource += random.Next(100);
+                    }
+                    readerWriterLockSlim.ExitWriteLock();
+                }));
+            }
+            Task.WaitAll(tasks.ToArray());
+        }
+        private static void WriteWithReaderWriterLock(int numberOfAdds)
+        {
+            var random = new Random(10000);
+            var resource = 10;
+            var readerWriterLockSlim = new ReaderWriterLock();
+            var tasks = new List<Task>();
+            for (var index = 0; index < 1000000; index++)
+            {
+                tasks.Add(Task.Factory.StartNew(() =>
+                {
+                    readerWriterLockSlim.AcquireWriterLock(Timeout.Infinite);
+                    for (var i = 0; i < numberOfAdds; i++)
+                    {
+                        resource += random.Next(100);
+                    }
+                    readerWriterLockSlim.ReleaseWriterLock();
+                }));
+            }
+            Task.WaitAll(tasks.ToArray());
+        }
+
+        private static void SyncOperationWithManualResetEvent(int addsNumber)
+        {
+            var random = new Random(10000);
+            var manualResetEvent = new ManualResetEvent(true);
+            var resource = 10;
+            var tasks = new List<Task>();
+            for (var index = 0; index < 1000000; index++)
+            {
+                tasks.Add(Task.Factory.StartNew(() =>
+                {
+                    manualResetEvent.WaitOne();
+                    for (var i = 0; i < addsNumber; i++)
+                    {
+                        resource += random.Next(100);
+                    }
+                    manualResetEvent.Set();
+                }));
+            }
+            Task.WaitAll(tasks.ToArray());
+        }
+        private static void SyncOperationWithManualResetEventSlim(int addsNumber)
+        {
+            var random = new Random(10000);
+            var manualResetEvent = new ManualResetEventSlim(true);
+            var resource = 10;
+            var tasks = new List<Task>();
+            for (var index = 0; index < 1000000; index++)
+            {
+                tasks.Add(Task.Factory.StartNew(() =>
+                {
+                    manualResetEvent.Wait();
+                    for (var i = 0; i < addsNumber; i++)
+                    {
+                        resource += random.Next(100);
+                    }
+                    manualResetEvent.Set();
+                }));
+            }
+            Task.WaitAll(tasks.ToArray());
+        }
+        private static void SyncOperationWithAutoResetEvent(int numberOfAdds)
+        {
+            var random = new Random(10000);
+            var autoResetEvent = new AutoResetEvent(true);
+            var resource = 10;
+            var tasks = new List<Task>();
+            for (var index = 0; index < 1000000; index++)
+            {
+                tasks.Add(Task.Factory.StartNew(() =>
+                {
+                    autoResetEvent.WaitOne();
+                    for (var i = 0; i < numberOfAdds; i++)
+                    {
+                        resource += random.Next(100);
+                    }
+                    autoResetEvent.Set();
+                }));
+            }
+            Task.WaitAll(tasks.ToArray());
+        }
+        private static void SyncOperationWithManualResetEvent()
+        {
+            var random = new Random(10000);
+            var manualResetEvent = new ManualResetEvent(true);
+
+            var resource = 10;
+            var tasks = new List<Task>();
+            for (var index = 0; index < 1000000; index++)
+            {
+                tasks.Add(Task.Factory.StartNew(() =>
+                {
+                    manualResetEvent.WaitOne();
+                    resource += random.Next(100);
+                    resource += random.Next(100);
+                    resource += random.Next(100);
+                    resource += random.Next(100);
+                    manualResetEvent.Set();
+                }));
+            }
+            Task.WaitAll(tasks.ToArray());
+        }
+
+        private static void SyncOperationWithManualResetEventSlim()
+        {
+            var random = new Random(10000);
+            var manualResetEvent = new ManualResetEventSlim(true);
+            var resource = 10;
+            var tasks = new List<Task>();
+            for (var index = 0; index < 1000000; index++)
+            {
+                tasks.Add(Task.Factory.StartNew(() =>
+                {
+                    manualResetEvent.Wait();
+                    resource += random.Next(100);
+                    resource += random.Next(100);
+                    resource += random.Next(100);
+                    resource += random.Next(100);
+                    manualResetEvent.Set();
+                }));
+            }
+            Task.WaitAll(tasks.ToArray());
+        }
         public static void TestLocks()
         {
             var stopwatch = new Stopwatch();
