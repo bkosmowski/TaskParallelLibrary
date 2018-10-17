@@ -8,56 +8,183 @@ namespace TaskParallelLibrary
 {
     public class DataSharing
     {
-        public static void TestResetEvents(int numberOfAdds)
+        public static void TestWrittingWithSemaphores(int numberOfAddition)
         {
             var stopwatch = new Stopwatch();
 
             stopwatch.Start();
-
-            DataSharing.SyncOperationWithManualResetEvent(numberOfAdds);
-
+            DataSharing.WriteWithSemaphore(numberOfAddition);
             stopwatch.Stop();
 
             Console.WriteLine(
-                $"Usage of ManualResetEvent for {numberOfAdds} items took {stopwatch.ElapsedMilliseconds} ms");
+                $"Usage of writting with semaphore for {numberOfAddition} items took {stopwatch.ElapsedMilliseconds} ms");
 
             stopwatch.Reset();
-
             stopwatch.Start();
-
-            DataSharing.SyncOperationWithManualResetEventSlim(numberOfAdds);
-
+            DataSharing.WriteWithSemaphoreSlim(numberOfAddition);
             stopwatch.Stop();
 
             Console.WriteLine(
-                $"Usage of ManualResetEventSlim {numberOfAdds} items took {stopwatch.ElapsedMilliseconds} ms");
-
-            stopwatch.Reset();
-
-            stopwatch.Start();
-
-            DataSharing.SyncOperationWithAutoResetEvent(numberOfAdds);
-
-            stopwatch.Stop();
-
-            Console.WriteLine(
-                $"Usage of AutoResetEvent for {numberOfAdds} items took {stopwatch.ElapsedMilliseconds} ms");
+                $"Usage of writting with semaphore slim {numberOfAddition} items took {stopwatch.ElapsedMilliseconds} ms");
         }
 
-        private static void WriteWithSemaphore(int numberOfAdds)
+        public static void TestResetEvents(int numberOfAddition)
         {
-            var random = new Random(10000);
+            var stopwatch = new Stopwatch();
+
+            stopwatch.Start();
+            DataSharing.SyncOperationWithManualResetEvent(numberOfAddition);
+            stopwatch.Stop();
+
+            Console.WriteLine(
+                $"Usage of ManualResetEvent for {numberOfAddition} items took {stopwatch.ElapsedMilliseconds} ms");
+
+            stopwatch.Reset();
+            stopwatch.Start();
+            DataSharing.SyncOperationWithManualResetEventSlim(numberOfAddition);
+            stopwatch.Stop();
+
+            Console.WriteLine(
+                $"Usage of ManualResetEventSlim {numberOfAddition} items took {stopwatch.ElapsedMilliseconds} ms");
+
+            stopwatch.Reset();
+            stopwatch.Start();
+            DataSharing.SyncOperationWithAutoResetEvent(numberOfAddition);
+            stopwatch.Stop();
+
+            Console.WriteLine(
+                $"Usage of AutoResetEvent for {numberOfAddition} items took {stopwatch.ElapsedMilliseconds} ms");
+        }
+
+        public static void TestReaderWriterLocks(int numberOfAddition)
+        {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            DataSharing.WriteWithReaderWriterLock(numberOfAddition);
+            stopwatch.Stop();
+
+            Console.WriteLine(
+                $"Usage of ReaderWriterLock for {numberOfAddition} items took {stopwatch.ElapsedMilliseconds} ms");
+
+            stopwatch.Reset();
+            stopwatch.Start();
+            DataSharing.WriteWithReaderWriterLockSlim(numberOfAddition);
+            stopwatch.Stop();
+
+            Console.WriteLine(
+                $"Usage of ReaderWriterLockSlim {numberOfAddition} items took {stopwatch.ElapsedMilliseconds} ms");
+        }
+
+        public static void TestLocks(int numberOfAddition)
+        {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            DataSharing.TestSpinLock(numberOfAddition);
+
+            stopwatch.Stop();
+            Console.WriteLine($"Spin lock for {numberOfAddition} items took {stopwatch.ElapsedMilliseconds} ms");
+
+            stopwatch.Reset();
+            stopwatch.Start();
+            DataSharing.TestLock(numberOfAddition);
+
+            stopwatch.Stop();
+            Console.WriteLine($"Lock for {numberOfAddition} items took {stopwatch.ElapsedMilliseconds} ms");
+
+            stopwatch.Reset();
+            stopwatch.Start();
+            DataSharing.TestInterlocked(numberOfAddition);
+
+            stopwatch.Stop();
+            Console.WriteLine($"Interlocked for {numberOfAddition} items took {stopwatch.ElapsedMilliseconds} ms");
+        }
+
+        private static void TestSpinLock(int numberOfAddition)
+        {
+            var tasks = new List<Task>();
             var resource = 10;
-            var semaphore = new Semaphore(0, 1);
+            var spinLock = new SpinLock();
+            for (var index = 0; index < 1000000; index++)
+            {
+                tasks.Add(Task.Factory.StartNew(() =>
+                {
+                    bool lockTaken = false;
+                    try
+                    {
+                        spinLock.Enter(ref lockTaken);
+                        for (var i = 0; i < numberOfAddition; i++)
+                        {
+                            resource += 100;
+                        }
+                    }
+                    catch (AggregateException ae)
+                    {
+                        Console.WriteLine($"Error message {ae}");
+                    }
+                    finally
+                    {
+                        if (lockTaken)
+                        {
+                            spinLock.Exit();
+                        }
+                    }
+                }));
+            }
+            Task.WaitAll(tasks.ToArray());
+        }
+
+        private static void TestLock(int numberOfAddition)
+        {
+            var locker = new object();
+            var tasks = new List<Task>();
+            var resource = 10;
+            for (var index = 0; index < 1000000; index++)
+            {
+                tasks.Add(Task.Factory.StartNew(() =>
+                {
+                    lock (locker)
+                    {
+                        for (var i = 0; i < numberOfAddition; i++)
+                        {
+                            resource += 100;
+                        }
+                    }
+                }));
+            }
+            Task.WaitAll(tasks.ToArray());
+        }
+
+        private static void TestInterlocked(int numberOfAddition)
+        {
+            var locker = new object();
+            var tasks = new List<Task>();
+            var resource = 10;
+            for (var index = 0; index < 1000000; index++)
+            {
+                tasks.Add(Task.Factory.StartNew(() =>
+                {
+                    for (var i = 0; i < numberOfAddition; i++)
+                    {
+                        Interlocked.Add(ref resource, 100);
+                    }
+                }));
+            }
+            Task.WaitAll(tasks.ToArray());
+        }
+
+        private static void WriteWithSemaphore(int numberOfAddition)
+        {
+            var resource = 10;
+            var semaphore = new Semaphore(1, 1);
             var tasks = new List<Task>();
             for (var index = 0; index < 1000000; index++)
             {
                 tasks.Add(Task.Factory.StartNew(() =>
                 {
                     semaphore.WaitOne();
-                    for (var i = 0; i < numberOfAdds; i++)
+                    for (var i = 0; i < numberOfAddition; i++)
                     {
-                        resource += random.Next(100);
+                        resource += 100;
                     }
                     semaphore.Release();
                 }));
@@ -65,25 +192,28 @@ namespace TaskParallelLibrary
             Task.WaitAll(tasks.ToArray());
         }
 
-        public static void TestReaderWriterLocks(int numberOfAdds)
+        private static void WriteWithSemaphoreSlim(int numberOfAddition)
         {
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
-            DataSharing.WriteWithReaderWriterLock(numberOfAdds);
-            stopwatch.Stop();
-            Console.WriteLine(
-                $"Usage of ReaderWriterLock for {numberOfAdds} items took {stopwatch.ElapsedMilliseconds} ms");
-            stopwatch.Reset();
-            stopwatch.Start();
-            DataSharing.WriteWithReaderWriterLockSlim(numberOfAdds);
-            stopwatch.Stop();
-            Console.WriteLine(
-                $"Usage of ReaderWriterLockSlim {numberOfAdds} items took {stopwatch.ElapsedMilliseconds} ms");
+            var resource = 10;
+            var semaphore = new SemaphoreSlim(1, 1);
+            var tasks = new List<Task>();
+            for (var index = 0; index < 1000000; index++)
+            {
+                tasks.Add(Task.Factory.StartNew(() =>
+                {
+                    semaphore.Wait();
+                    for (var i = 0; i < numberOfAddition; i++)
+                    {
+                        resource += 100;
+                    }
+                    semaphore.Release();
+                }));
+            }
+            Task.WaitAll(tasks.ToArray());
         }
 
-        private static void WriteWithReaderWriterLockSlim(int numberOfAdds)
+        private static void WriteWithReaderWriterLockSlim(int numberOfAddition)
         {
-            var random = new Random(10000);
             var resource = 10;
             var readerWriterLockSlim = new ReaderWriterLockSlim();
             var tasks = new List<Task>();
@@ -92,18 +222,17 @@ namespace TaskParallelLibrary
                 tasks.Add(Task.Factory.StartNew(() =>
                 {
                     readerWriterLockSlim.EnterWriteLock();
-                    for (var i = 0; i < numberOfAdds; i++)
+                    for (var i = 0; i < numberOfAddition; i++)
                     {
-                        resource += random.Next(100);
+                        resource += 100;
                     }
                     readerWriterLockSlim.ExitWriteLock();
                 }));
             }
             Task.WaitAll(tasks.ToArray());
         }
-        private static void WriteWithReaderWriterLock(int numberOfAdds)
+        private static void WriteWithReaderWriterLock(int numberOfAddition)
         {
-            var random = new Random(10000);
             var resource = 10;
             var readerWriterLockSlim = new ReaderWriterLock();
             var tasks = new List<Task>();
@@ -112,9 +241,9 @@ namespace TaskParallelLibrary
                 tasks.Add(Task.Factory.StartNew(() =>
                 {
                     readerWriterLockSlim.AcquireWriterLock(Timeout.Infinite);
-                    for (var i = 0; i < numberOfAdds; i++)
+                    for (var i = 0; i < numberOfAddition; i++)
                     {
-                        resource += random.Next(100);
+                        resource += 100;
                     }
                     readerWriterLockSlim.ReleaseWriterLock();
                 }));
@@ -124,7 +253,6 @@ namespace TaskParallelLibrary
 
         private static void SyncOperationWithManualResetEvent(int addsNumber)
         {
-            var random = new Random(10000);
             var manualResetEvent = new ManualResetEvent(true);
             var resource = 10;
             var tasks = new List<Task>();
@@ -135,7 +263,7 @@ namespace TaskParallelLibrary
                     manualResetEvent.WaitOne();
                     for (var i = 0; i < addsNumber; i++)
                     {
-                        resource += random.Next(100);
+                        resource += 100;
                     }
                     manualResetEvent.Set();
                 }));
@@ -144,7 +272,6 @@ namespace TaskParallelLibrary
         }
         private static void SyncOperationWithManualResetEventSlim(int addsNumber)
         {
-            var random = new Random(10000);
             var manualResetEvent = new ManualResetEventSlim(true);
             var resource = 10;
             var tasks = new List<Task>();
@@ -155,16 +282,15 @@ namespace TaskParallelLibrary
                     manualResetEvent.Wait();
                     for (var i = 0; i < addsNumber; i++)
                     {
-                        resource += random.Next(100);
+                        resource += 100;
                     }
                     manualResetEvent.Set();
                 }));
             }
             Task.WaitAll(tasks.ToArray());
         }
-        private static void SyncOperationWithAutoResetEvent(int numberOfAdds)
+        private static void SyncOperationWithAutoResetEvent(int numberOfAddition)
         {
-            var random = new Random(10000);
             var autoResetEvent = new AutoResetEvent(true);
             var resource = 10;
             var tasks = new List<Task>();
@@ -173,9 +299,9 @@ namespace TaskParallelLibrary
                 tasks.Add(Task.Factory.StartNew(() =>
                 {
                     autoResetEvent.WaitOne();
-                    for (var i = 0; i < numberOfAdds; i++)
+                    for (var i = 0; i < numberOfAddition; i++)
                     {
-                        resource += random.Next(100);
+                        resource += 100;
                     }
                     autoResetEvent.Set();
                 }));
@@ -223,38 +349,6 @@ namespace TaskParallelLibrary
                 }));
             }
             Task.WaitAll(tasks.ToArray());
-        }
-        public static void TestLocks()
-        {
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
-            for (var index = 0; index < 10000; index++)
-            {
-                DataSharing.SyncOperationOnBankAccountWithSpinLock();
-            }
-
-            stopwatch.Stop();
-            Console.WriteLine($"Spin lock elapsed time {stopwatch.ElapsedMilliseconds} ms");
-
-            stopwatch.Reset();
-            stopwatch.Start();
-            for (var index = 0; index < 10000; index++)
-            {
-                DataSharing.SyncOperationOnBankAccountWithLock();
-            }
-
-            stopwatch.Stop();
-            Console.WriteLine($"Lock elapsed time {stopwatch.ElapsedMilliseconds} ms");
-
-            stopwatch.Reset();
-            stopwatch.Start();
-            for (var index = 0; index < 10000; index++)
-            {
-                DataSharing.SyncOperationOnBankAccountWithInterlocked();
-            }
-
-            stopwatch.Stop();
-            Console.WriteLine($"Interlocked elapsed time {stopwatch.ElapsedMilliseconds} ms");
         }
 
         public static void SyncWithReaderWriterLocks()

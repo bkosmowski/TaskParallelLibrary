@@ -7,7 +7,10 @@ namespace TaskParallelLibrary
     {
         static void Main(string[] args)
         {
+            TestInCases(DataSharing.TestLocks);
+            TestInCases(DataSharing.TestWrittingWithSemaphores);
             TestInCases(DataSharing.TestResetEvents);
+            TestInCases(DataSharing.TestReaderWriterLocks);
             Console.ReadKey();
         }
 
