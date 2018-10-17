@@ -8,6 +8,30 @@ namespace TaskParallelLibrary
 {
     public class DataSharing
     {
+        private volatile bool _shouldStop;
+        public void UseVolatileWithTasks()
+        {
+            Console.WriteLine("Main thread is working...");
+
+            var thread = new Thread(() =>
+            {
+                while (!_shouldStop)
+                {
+                    Console.WriteLine("Thread is working...");
+                    Thread.Sleep(1000);
+                }
+            });
+
+            thread.Start();
+
+            Thread.Sleep(10000);
+
+            _shouldStop = true;
+
+            thread.Join();
+
+            Console.WriteLine("Work is done");
+        }
         public static void TestWrittingWithSemaphores(int numberOfAddition)
         {
             var stopwatch = new Stopwatch();
