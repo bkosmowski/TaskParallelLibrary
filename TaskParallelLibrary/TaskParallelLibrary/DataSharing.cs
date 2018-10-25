@@ -214,6 +214,9 @@ namespace TaskParallelLibrary
                 }));
             }
             Task.WaitAll(tasks.ToArray());
+
+            var producer = new Thread(()=>{});
+            
         }
 
         private static void WriteWithSemaphoreSlim(int numberOfAddition)

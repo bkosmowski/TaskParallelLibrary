@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskParallelLibrary", "TaskParallelLibrary\TaskParallelLibrary.csproj", "{05D85173-E68A-454D-AC50-678A040581F6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskParallelLibraryTest", "TaskParallelLibraryTest\TaskParallelLibraryTest.csproj", "{3E89E07A-1024-4ED6-9B65-ED17DBEDD382}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{05D85173-E68A-454D-AC50-678A040581F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05D85173-E68A-454D-AC50-678A040581F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05D85173-E68A-454D-AC50-678A040581F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E89E07A-1024-4ED6-9B65-ED17DBEDD382}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E89E07A-1024-4ED6-9B65-ED17DBEDD382}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E89E07A-1024-4ED6-9B65-ED17DBEDD382}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E89E07A-1024-4ED6-9B65-ED17DBEDD382}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

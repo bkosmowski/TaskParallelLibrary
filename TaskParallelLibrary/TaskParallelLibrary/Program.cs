@@ -7,8 +7,9 @@ namespace TaskParallelLibrary
     {
         static void Main(string[] args)
         {
-            new DataSharing().UseVolatileWithTasks();
+            //new DataSharing().UseVolatileWithTasks();
 
+            ProducerConsumer.UseLock();
             Console.ReadKey();
         }
 
