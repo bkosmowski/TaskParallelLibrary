@@ -20,17 +20,20 @@ namespace TaskParallelLibrary.NotifyPropertyChanged
             {
                 return false;
             }
+
             property = value;
             RaisePropertyChanged(propertyName);
             return true;
         }
 
-        protected bool SetProperty<T>(ref T property, T value, Action onPropertyChanged, [CallerMemberName] string propertyName = null)
+        protected bool SetProperty<T>(ref T property, T value, Action onPropertyChanged,
+            [CallerMemberName] string propertyName = null)
         {
             if (EqualityComparer<T>.Default.Equals(property, value))
             {
                 return false;
             }
+
             property = value;
             onPropertyChanged?.Invoke();
             RaisePropertyChanged(propertyName);
