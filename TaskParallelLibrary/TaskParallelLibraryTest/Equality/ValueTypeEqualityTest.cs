@@ -64,24 +64,32 @@ namespace TaskParallelLibraryTest.Equality
         }
 
         [Test]
-        public void HashSet_Should_Have_Only_One_FoodItem_Despite_Inserting_Two_With_The_Same_Properties()
+        public void HashSet_Should_Have_Only_One_FoodItem_Despite_Inserting_Two_With_The_Same_HashCodes()
         {
+            var foodItem1 = new FoodItem(100, "apple", FoodGroup.Fruit);
+            var foodItem2 = new FoodItem(100, "apple", FoodGroup.Fruit);
+            
             var hashSet = new HashSet<FoodItem>
             {
-                new FoodItem(100, "apple", FoodGroup.Fruit), new FoodItem(100, "apple", FoodGroup.Fruit)
+                foodItem1, foodItem2
             };
 
+            Assert.AreEqual(foodItem1.GetHashCode(), foodItem2.GetHashCode());
             Assert.AreEqual(hashSet.Count, 1);
         }
 
         [Test]
-        public void HasSet_Should_Have_Two_FoodItem_When_They_Have_Different_Properties()
+        public void HasSet_Should_Have_Two_FoodItem_When_They_Have_Different_HashCodes()
         {
+            var foodItem1 = new FoodItem(100, "apple", FoodGroup.Fruit);
+            var foodItem2 = new FoodItem(100, "banana", FoodGroup.Fruit);
+            
             var hashSet = new HashSet<FoodItem>
             {
-                new FoodItem(100, "apple", FoodGroup.Fruit), new FoodItem(100, "banana", FoodGroup.Fruit)
+                foodItem1, foodItem2
             };
 
+            Assert.AreNotEqual(foodItem1.GetHashCode(), foodItem2.GetHashCode());
             Assert.AreEqual(hashSet.Count, 2);
         }
 
