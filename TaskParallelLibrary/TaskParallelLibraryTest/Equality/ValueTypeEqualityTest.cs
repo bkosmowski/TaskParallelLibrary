@@ -76,7 +76,7 @@ namespace TaskParallelLibraryTest.Equality
         {
             var apple1 = new FoodItem(100, "apple", FoodGroup.Fruit);
             var apple2 = new FoodItem(100, "apple", FoodGroup.Fruit);
-
+            //TODO: WTF?
             Assert.IsFalse(apple1 != apple2);
         }
     }

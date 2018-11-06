@@ -2,8 +2,6 @@
 
 namespace TaskParallelLibrary.Equality
 {
-    public enum FoodGroup { Meat, Fruit, Vegetables, Sweets }
-    
     public struct FoodItem : IEquatable<FoodItem>
     {
         public FoodItem(int calories, string name, FoodGroup group)
