@@ -3,6 +3,7 @@ using TaskParallelLibrary.NotifyPropertyChanged;
 
 namespace TaskParallelLibraryTest.NotifyPropertyChanged
 {
+    //Added tests with threads.
     [TestFixture]
     public class NotifyPropertyChangedTests
     {

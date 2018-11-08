@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Threading;
+using TaskParallelLibrary.Disposable;
 
 namespace TaskParallelLibrary
 {
@@ -7,9 +7,21 @@ namespace TaskParallelLibrary
     {
         static void Main(string[] args)
         {
-            //new DataSharing().UseVolatileWithTasks();
+            var eventGenerator = new EventGenerator();
 
-            ProducerConsumer.UseLock();
+            using (var disposable = new Disposable.Disposable(eventGenerator))
+            {
+                for (var index = 0; index < 10; index++)
+                {
+                    eventGenerator.BroadcastEvent();
+                }
+            }
+
+            for (var index = 0; index < 10; index++)
+            {
+                eventGenerator.BroadcastEvent();
+            }
+
             Console.ReadKey();
         }
 
