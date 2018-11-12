@@ -59,7 +59,7 @@ namespace TaskParallelLibrary.Enumerable
             return SelectImpl(source, selector);
         }
 
-        public static IEnumerable<TResult> SelectImpl<TSource, TResult>(this IEnumerable<TSource> source,
+        private static IEnumerable<TResult> SelectImpl<TSource, TResult>(this IEnumerable<TSource> source,
             Func<TSource, TResult> selector)
         {
             foreach (var item in source)
