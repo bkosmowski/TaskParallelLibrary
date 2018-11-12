@@ -15,12 +15,27 @@ namespace TaskParallelLibraryTest.Enumerable
             var result = source.Where(x => x < 4);
             result.AreSequenceEqual(new[] {1, 2, 3, 1});
         }
+        
+        [Test]
+        public void SimpleFilteringWithIndex()
+        {
+            var source = new[] {1, 2, 3, 5, 8, 1, 4};
+            var result = source.Where((x, index) => x < 4);
+            result.AreSequenceEqual(new[] {1, 2, 3, 1});
+        }
 
         [Test]
         public void NullSourceThrowsNullArgumentException()
         {
             IEnumerable<int> source = null;
             Assert.Throws<ArgumentNullException>(() => source.Where(x => x > 5));
+        }
+
+        [Test]
+        public void NullSourceThrowsNullArgumentExceptionWithIndex()
+        {
+            IEnumerable<int> source = null;
+            Assert.Throws<ArgumentNullException>(() => source.Where((x, index) => x > 5));
         }
 
         [Test]
@@ -32,9 +47,23 @@ namespace TaskParallelLibraryTest.Enumerable
         }
 
         [Test]
+        public void NullPredicateThrowsNullArgumentExceptionWithIndex()
+        {
+            var source = new[] {1, 3, 7, 9, 10};
+            Func<int,int , bool> predicate = null;
+            Assert.Throws<ArgumentNullException>(() => source.Where(predicate));
+        }
+
+        [Test]
         public void ExecutionIsDeferred()
         {
             ThrowingEnumerable.AssertDeferred(src => src.Where(x => x > 0));
+        }
+
+        [Test]
+        public void ExecutionIsDeferredWithIndex()
+        {
+            ThrowingEnumerable.AssertDeferred(src => src.Where((x, index) => x > 0));
         }
 
         [Test]
@@ -42,6 +71,13 @@ namespace TaskParallelLibraryTest.Enumerable
         {
             var source = new int[0];
             var result = source.Where(x => x < 4);
+            result.AreSequenceEqual(new int [0]);
+        }
+        [Test]
+        public void FilterEmptySourceWithIndex()
+        {
+            var source = new int[0];
+            var result = source.Where((x, index) => x < 4);
             result.AreSequenceEqual(new int [0]);
         }
     }
