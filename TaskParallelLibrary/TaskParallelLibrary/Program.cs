@@ -9,7 +9,7 @@ namespace TaskParallelLibrary
         {
             var eventGenerator = new EventGenerator();
 
-            using (var disposable = new Disposable.Disposable(eventGenerator))
+            using (var disposable = new UnmanagedDispose(eventGenerator))
             {
                 for (var index = 0; index < 10; index++)
                 {
