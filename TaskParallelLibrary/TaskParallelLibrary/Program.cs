@@ -1,5 +1,6 @@
 ﻿using System;
 using TaskParallelLibrary.Disposable;
+using TaskParallelLibrary.Enumerable;
 
 namespace TaskParallelLibrary
 {
@@ -7,21 +8,13 @@ namespace TaskParallelLibrary
     {
         static void Main(string[] args)
         {
-            var eventGenerator = new EventGenerator();
+            var animalGroup = new AnimalGroup(new Animal("Wafel", 10), new Animal("Sami", 1), new Animal("Jed", 1));
 
-            using (var disposable = new UnmanagedDispose(eventGenerator))
+            foreach (var animal in animalGroup)
             {
-                for (var index = 0; index < 10; index++)
-                {
-                    eventGenerator.BroadcastEvent();
-                }
+                Console.WriteLine(animal);
             }
-
-            for (var index = 0; index < 10; index++)
-            {
-                eventGenerator.BroadcastEvent();
-            }
-
+            
             Console.ReadKey();
         }
 
