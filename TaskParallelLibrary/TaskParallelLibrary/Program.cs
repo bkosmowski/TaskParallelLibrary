@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using TaskParallelLibrary.Disposable;
 using TaskParallelLibrary.Enumerable;
 
@@ -14,6 +15,8 @@ namespace TaskParallelLibrary
             {
                 Console.WriteLine(animal);
             }
+
+            animalGroup.ToList();
             
             Console.ReadKey();
         }
