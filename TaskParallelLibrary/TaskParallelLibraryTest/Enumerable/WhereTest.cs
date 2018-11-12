@@ -13,7 +13,7 @@ namespace TaskParallelLibraryTest.Enumerable
         {
             var source = new[] {1, 2, 3, 5, 8, 1, 4};
             var result = source.Where(x => x < 4);
-            result.AreSequenceEqual(new[] {1, 2, 3, 1});
+            result.AssertSequenceEqual(new[] {1, 2, 3, 1});
         }
         
         [Test]
@@ -21,25 +21,25 @@ namespace TaskParallelLibraryTest.Enumerable
         {
             var source = new[] {1, 2, 3, 5, 8, 1, 4};
             var result = source.Where((x, index) => x < 4);
-            result.AreSequenceEqual(new[] {1, 2, 3, 1});
+            result.AssertSequenceEqual(new[] {1, 2, 3, 1});
         }
 
         [Test]
-        public void Null_Source_Throws_Null_Argument_Exception()
+        public void Null_Source_Throws_NullArgumentException()
         {
             IEnumerable<int> source = null;
             Assert.Throws<ArgumentNullException>(() => source.Where(x => x > 5));
         }
 
         [Test]
-        public void Null_Source_Throws_Null_Argument_Exception_With_Index()
+        public void Null_Source_Throws_NullArgumentException_With_Index()
         {
             IEnumerable<int> source = null;
             Assert.Throws<ArgumentNullException>(() => source.Where((x, index) => x > 5));
         }
 
         [Test]
-        public void Null_Predicate_Throws_Null_Argument_Exception()
+        public void Null_Predicate_Throws_NullArgumentException()
         {
             var source = new[] {1, 3, 7, 9, 10};
             Func<int, bool> predicate = null;
@@ -47,7 +47,7 @@ namespace TaskParallelLibraryTest.Enumerable
         }
 
         [Test]
-        public void Null_Predicate_Throws_Null_Argument_Exception_With_Index()
+        public void Null_Predicate_Throws_NullArgumentException_With_Index()
         {
             var source = new[] {1, 3, 7, 9, 10};
             Func<int,int , bool> predicate = null;
@@ -71,14 +71,14 @@ namespace TaskParallelLibraryTest.Enumerable
         {
             var source = new int[0];
             var result = source.Where(x => x < 4);
-            result.AreSequenceEqual(new int [0]);
+            result.AssertSequenceEqual(new int [0]);
         }
         [Test]
         public void Filter_Empty_Source_With_Index()
         {
             var source = new int[0];
             var result = source.Where((x, index) => x < 4);
-            result.AreSequenceEqual(new int [0]);
+            result.AssertSequenceEqual(new int [0]);
         }
     }
 }
