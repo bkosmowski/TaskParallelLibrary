@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using TaskParallelLibrary.Disposable;
 using TaskParallelLibrary.Enumerable;
 
 namespace TaskParallelLibrary
@@ -9,15 +7,6 @@ namespace TaskParallelLibrary
     {
         static void Main(string[] args)
         {
-            var animalGroup = new AnimalGroup(new Animal("Wafel", 10), new Animal("Sami", 1), new Animal("Jed", 1));
-
-            foreach (var animal in animalGroup)
-            {
-                Console.WriteLine(animal);
-            }
-
-            animalGroup.ToList();
-            
             Console.ReadKey();
         }
 

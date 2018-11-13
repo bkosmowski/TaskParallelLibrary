@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace TaskParallelLibrary.Enumerable
 {
@@ -22,6 +24,16 @@ namespace TaskParallelLibrary.Enumerable
             {
                 yield return start + index;
             }
+        }
+
+        public static IEnumerable<TResult> Empty<TResult>()
+        {
+            return EmptyHolder<TResult>.Empty;
+        }
+
+        private static class EmptyHolder<T>
+        {
+          public static readonly T[] Empty = new T[0];
         }
     }
 }
