@@ -35,5 +35,20 @@ namespace TaskParallelLibrary.Enumerable
         {
           public static readonly T[] Empty = new T[0];
         }
+
+        public static IEnumerable<TResult> Repeat<TResult>(TResult item, int count)
+        {
+            if (count < 0) throw new ArgumentOutOfRangeException(nameof(count));
+
+            return RepeatImpl(item, count);
+        }
+
+        private static IEnumerable<TResult> RepeatImpl<TResult>(TResult item, int count)
+        {
+            for (var index = 0; index < count; index++)
+            {
+                yield return item;
+            }
+        }
     }
 }
