@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace TaskParallelLibrary.Enumerable
@@ -65,6 +66,79 @@ namespace TaskParallelLibrary.Enumerable
             foreach (var item in source)
             {
                 yield return selector(item);
+            }
+        }
+        
+        public static int Count<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+
+            checked
+            {
+                var index = 0;
+                foreach (var item in source)
+                {
+                    if (predicate(item)) index++;
+                }
+                return index;   
+            }
+        }
+
+        public static int Count<TSource>(this IEnumerable<TSource> source)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            
+            if (source is ICollection<TSource> genericCollection) return genericCollection.Count;
+            if (source is ICollection nonGenericCollection) return nonGenericCollection.Count;
+
+            checked
+            {
+                var index = 0;
+                foreach (var item in source)
+                {
+                    index++;
+                }
+                return index;
+            }
+        }
+
+        public static long LongCount<TSource>(this IEnumerable<TSource> source,
+            Func<TSource, bool> predicate)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+
+            checked
+            {
+                var index = 0L;
+                foreach (var item in source)
+                {
+                    if (predicate(item))
+                    {
+                        index++;
+                    }
+                }
+
+                return index;
+            }
+        }
+
+        public static long LongCount<TSource>(this IEnumerable<TSource> source)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+
+            if (source is ICollection<TSource> genericCollection) return genericCollection.Count;
+            if (source is ICollection nonGenericCollection) return nonGenericCollection.Count;
+
+            checked
+            {
+                var index = 0L;
+                foreach (var item in source)
+                {
+                    index++;
+                }
+                return index;
             }
         }
     }
