@@ -7,6 +7,9 @@ namespace TaskParallelLibrary
     {
         static void Main(string[] args)
         {
+            (int value1, string value2) temp = (10, "test");
+
+            temp.value1 = 10;
             Console.ReadKey();
         }
 
