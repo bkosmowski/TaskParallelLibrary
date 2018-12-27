@@ -1,16 +1,45 @@
 ﻿using System;
-using TaskParallelLibrary.Enumerable;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace TaskParallelLibrary
 {
     class Program
     {
+        private volatile bool _flag = true;
         static void Main(string[] args)
         {
-            (int value1, string value2) temp = (10, "test");
+            //var awaiter = Task.Run(() => { Console.WriteLine("A message from thread pool"); }).GetAwaiter();
 
-            temp.value1 = 10;
-            Console.ReadKey();
+            //awaiter.OnCompleted(() =>
+            //{
+            //    Console.WriteLine("Action is completed");
+            //});
+
+            //await Task.Run(() => { Console.WriteLine("A message from thread pool"); });
+
+            //Console.WriteLine("A action is completed");
+
+
+            //await Task.Run(() => { Console.WriteLine("A message from thread pool"); }).ConfigureAwait(false);
+            //await Task.Run(() => { Console.WriteLine("A message from thread pool"); }).ConfigureAwait(true);
+
+            //Console.WriteLine("A action is completed");
+
+            //Console.ReadKey();
+
+            //new List<int>().Find()
+
+            var program = new Program();
+
+            var thread = new Thread(() => program._flag = false);
+            thread.Start();
+
+            while (program._flag) //with volatile refresh cache
+            {
+
+            }
         }
 
         private static void TestInCases(Action<int> action)
