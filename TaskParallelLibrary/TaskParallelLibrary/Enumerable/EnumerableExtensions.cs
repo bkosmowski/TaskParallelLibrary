@@ -141,5 +141,31 @@ namespace TaskParallelLibrary.Enumerable
                 return index;
             }
         }
+
+        public static TSource Find<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        {
+            foreach (var item in source)
+            {
+                if (predicate(item))
+                    return item;
+            }
+
+            return default;
+        }
+
+        public static IEnumerable<TResult> Zip<TResult, TFirst, TSecond>(this IEnumerable<TFirst> first,
+            IEnumerable<TSecond> second, Func<TFirst, TSecond, TResult> selector)
+        {
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
+            using (var firstEnumerator = first.GetEnumerator())
+            using (var secondEnumerator = second.GetEnumerator())
+            {
+                while (firstEnumerator.MoveNext() && secondEnumerator.MoveNext())
+                {
+                    yield return selector(firstEnumerator.Current, secondEnumerator.Current);
+                }
+            }
+        }
     }
 }
