@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Android.App;
@@ -37,6 +36,7 @@ namespace TPLApp
 		    _syncContextButton.Click += OnClickSyncContextButton;
 		    _getAwaiterButton.Click += OnClickGetAwaiterButton;
 		    _continueWithButton.Click += OnClickContinueWithButton;
+            _asyncButton.Click += OnClickAsyncButton;
 		}
 
 	    private void OnClickSyncContextButton(object sender, EventArgs e)
@@ -63,9 +63,17 @@ namespace TPLApp
 	    {
 	        var task = Task.Run(() => PrimeNumber());
 	        task.ContinueWith(
-	            result => _textView.Text =
-	                $"Result from ContinueWith: \nThere is {result.Result} of prime numbers \nin range from 2 to 300000",
+	            continuationTask => _textView.Text =
+	                $"Result from ContinueWith: \nThere is {continuationTask.Result} of prime numbers \nin range from 2 to 300000",
 	            TaskScheduler.FromCurrentSynchronizationContext());
+	    }
+
+	    private async void OnClickAsyncButton(object sender, EventArgs e)
+	    {
+	        var result = await Task.Run(() => PrimeNumber());
+	        _textView.Text =
+	            $"Result from async: \nThere is {result} of prime numbers \nin range from 2 to 300000";
+
 	    }
 
 	    private int PrimeNumber()
