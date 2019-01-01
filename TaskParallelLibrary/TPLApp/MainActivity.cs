@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Android.App;
@@ -13,6 +14,7 @@ namespace TPLApp
 	public class MainActivity : AppCompatActivity
 	{
 	    private Button _getAwaiterButton;
+	    private Button _continueWithButton;
 	    private Button _asyncButton;
 	    private Button _syncContextButton;
 	    private TextView _textView;
@@ -27,11 +29,14 @@ namespace TPLApp
             _uiSyncContext = SynchronizationContext.Current;
 
 		    _getAwaiterButton = FindViewById<Button>(Resource.Id.GetAwaiterButton);
+		    _continueWithButton = FindViewById<Button>(Resource.Id.ContinueWithButton);
 		    _asyncButton = FindViewById<Button>(Resource.Id.AsyncButton);
 		    _syncContextButton = FindViewById<Button>(Resource.Id.SyncContextButton);
 		    _textView = FindViewById<TextView>(Resource.Id.TextView);
+
 		    _syncContextButton.Click += OnClickSyncContextButton;
 		    _getAwaiterButton.Click += OnClickGetAwaiterButton;
+		    _continueWithButton.Click += OnClickContinueWithButton;
 		}
 
 	    private void OnClickSyncContextButton(object sender, EventArgs e)
@@ -50,8 +55,17 @@ namespace TPLApp
             awaiter.OnCompleted(() =>
             {
                 var result = awaiter.GetResult();
-                _textView.Text = $"There is {result} of prime numbers in range from 2 to 300000";
+                _textView.Text = $"Result from GetAwaiter: \nThere is {result} of prime numbers \nin range from 2 to 300000";
             });
+	    }
+
+	    private void OnClickContinueWithButton(object sender, EventArgs e)
+	    {
+	        var task = Task.Run(() => PrimeNumber());
+	        task.ContinueWith(
+	            result => _textView.Text =
+	                $"Result from ContinueWith: \nThere is {result.Result} of prime numbers \nin range from 2 to 300000",
+	            TaskContinuationOptions.ExecuteSynchronously);
 	    }
 
 	    private int PrimeNumber()

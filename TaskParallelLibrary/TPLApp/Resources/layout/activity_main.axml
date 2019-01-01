@@ -12,7 +12,7 @@
     android:textSize="20dp"
     android:text="Click the button!"
     android:gravity="center"
-    android:maxLines="1"
+    android:lines="3"
     android:layout_margin="8dp"
     android:background="#FFFFFF"
     android:textColor="#000000" />
@@ -23,7 +23,18 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textColor="#000000"
-    android:text="Test task!"
+    android:text="Test GetAwaiter!"
+    android:textSize="14dp"
+    android:layout_margin="8dp"
+    android:padding="8dp"/>
+  <Button
+    android:id="@+id/ContinueWithButton"
+    android:background="#FFFFFF"
+    android:layout_marginTop="10dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textColor="#000000"
+    android:text="Test ContinueWith!"
     android:textSize="14dp"
     android:layout_margin="8dp"
     android:padding="8dp"/>
