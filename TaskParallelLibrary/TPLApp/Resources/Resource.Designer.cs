@@ -2339,6 +2339,9 @@ namespace TPLApp
 			// aapt resource value: 0x7f080034
 			public const int FUNCTION = 2131230772;
 			
+			// aapt resource value: 0x7f08008c
+			public const int GetAwaiterButton = 2131230860;
+			
 			// aapt resource value: 0x7f080035
 			public const int META = 2131230773;
 			
@@ -2350,9 +2353,6 @@ namespace TPLApp
 			
 			// aapt resource value: 0x7f08008e
 			public const int SyncContextButton = 2131230862;
-			
-			// aapt resource value: 0x7f08008c
-			public const int TaskButton = 2131230860;
 			
 			// aapt resource value: 0x7f08008b
 			public const int TextView = 2131230859;

@@ -12,7 +12,7 @@ namespace TPLApp
 	[Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true)]
 	public class MainActivity : AppCompatActivity
 	{
-	    private Button _taskButton;
+	    private Button _getAwaiterButton;
 	    private Button _asyncButton;
 	    private Button _syncContextButton;
 	    private TextView _textView;
@@ -26,12 +26,12 @@ namespace TPLApp
 			SetContentView(Resource.Layout.activity_main);
             _uiSyncContext = SynchronizationContext.Current;
 
-		    _taskButton = FindViewById<Button>(Resource.Id.TaskButton);
+		    _getAwaiterButton = FindViewById<Button>(Resource.Id.GetAwaiterButton);
 		    _asyncButton = FindViewById<Button>(Resource.Id.AsyncButton);
 		    _syncContextButton = FindViewById<Button>(Resource.Id.SyncContextButton);
 		    _textView = FindViewById<TextView>(Resource.Id.TextView);
 		    _syncContextButton.Click += OnClickSyncContextButton;
-		    _taskButton.Click += OnClickTaskButton;
+		    _getAwaiterButton.Click += OnClickGetAwaiterButton;
 		}
 
 	    private void OnClickSyncContextButton(object sender, EventArgs e)
@@ -43,7 +43,7 @@ namespace TPLApp
 	        });
 	    }
 
-	    private void OnClickTaskButton(object sender, EventArgs e)
+	    private void OnClickGetAwaiterButton(object sender, EventArgs e)
 	    {
 	        var task = Task.Run(() => PrimeNumber());
 	        var awaiter = task.GetAwaiter();
