@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Android.App;
 using Android.OS;
 using Android.Support.V7.App;
@@ -33,7 +34,11 @@ namespace TPLApp
 
 	    private void OnClickSyncContextButton(object sender, EventArgs e)
 	    {
-	        _uiSyncContext.Post(_ => _textView.Text = "UI context captured", null);
+	        Task.Run(() =>
+	        {
+	            Task.Delay(5000);
+	            _uiSyncContext.Post(_ => _textView.Text = "UI context captured", null);
+	        });
 	    }
 	}
 }
