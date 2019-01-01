@@ -1,29 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout 
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:orientation="vertical"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:gravity="center">
   <TextView
-    android:id="@+id/Text"
+    android:id="@+id/TextView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textSize="18dp"
+    android:textSize="20dp"
     android:text="Click the button!"
     android:gravity="center"
     android:maxLines="1"
+    android:layout_margin="8dp"
     android:background="#FFFFFF"
     android:textColor="#000000" />
   <Button
-    android:id="@+id/CancelButton"
+    android:id="@+id/SyncButton"
     android:background="#FFFFFF"
     android:layout_marginTop="10dp"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textColor="#000000"
-    android:text="Click me!"
-    android:textSize="16dp"
+    android:text="Test sync!"
+    android:textSize="14dp"
+    android:layout_margin="8dp"
+    android:padding="8dp"/>
+  <Button
+    android:id="@+id/AsyncButton"
+    android:background="#FFFFFF"
+    android:layout_marginTop="10dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textColor="#000000"
+    android:text="Test async!"
+    android:textSize="14dp"
+    android:layout_margin="8dp"
+    android:padding="8dp"/>
+  <Button
+    android:id="@+id/SyncContextButton"
+    android:background="#FFFFFF"
+    android:layout_marginTop="10dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textColor="#000000"
+    android:text="Test sync context!"
+    android:textSize="14dp"
     android:layout_margin="8dp"
     android:padding="8dp"/>
 </LinearLayout>
