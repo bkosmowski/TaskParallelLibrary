@@ -65,7 +65,7 @@ namespace TPLApp
 	        task.ContinueWith(
 	            result => _textView.Text =
 	                $"Result from ContinueWith: \nThere is {result.Result} of prime numbers \nin range from 2 to 300000",
-	            TaskContinuationOptions.ExecuteSynchronously);
+	            TaskScheduler.FromCurrentSynchronizationContext());
 	    }
 
 	    private int PrimeNumber()
