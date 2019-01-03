@@ -40,20 +40,30 @@ namespace TPLApp
 		}
 
 	    private void OnClickSyncContextButton(object sender, EventArgs e)
-	    {
-	        Task.Run(async () =>
-	        {
-	            await Task.Delay(5000);
-	            _uiSyncContext.Post(_ => _textView.Text = "UI context captured", null);
-	        });
-	    }
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                Task.Run(() =>
+                {
+                    Console.WriteLine(i);
+                });
+            }            
+        }
 
 	    private void OnClickGetAwaiterButton(object sender, EventArgs e)
-	    {
-	        var task = Task.Run(() => PrimeNumber());
+        {
+            var x = 1;
+	        var task = Task.Run(() =>
+            {
+                x = 2;
+                return PrimeNumber();
+                
+            });
+            x = 3;
 	        var awaiter = task.GetAwaiter();
             awaiter.OnCompleted(() =>
             {
+                x = ??
                 var result = awaiter.GetResult();
                 _textView.Text = $"Result from GetAwaiter: \nThere is {result} of prime numbers \nin range from 2 to 300000";
             });

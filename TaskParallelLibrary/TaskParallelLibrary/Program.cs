@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -37,6 +38,23 @@ namespace TaskParallelLibrary
             thread.Start();
 
             while (program._flag) //with volatile refresh cache
+            {
+
+            }
+
+            if (program._flag)
+            {
+                return;
+            }
+
+            //lock (obs)
+            //{
+            //    program._flag = true;
+            //}
+
+            var enumerable = System.Linq.Enumerable.Range(0, 100).Take(20);
+
+            foreach (var item in enumerable)
             {
 
             }
