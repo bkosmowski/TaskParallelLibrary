@@ -1,5 +1,3 @@
-using System.Runtime.CompilerServices;
-
 namespace TaskParallelLibrary.Immutable
 {
     public class MutableDevice
@@ -9,5 +7,10 @@ namespace TaskParallelLibrary.Immutable
         public decimal Price { get; set; }
 
         public void Discount(int discount) => Price = Price * (1 - discount / 100M);
+
+        public override string ToString()
+        {
+            return $"{nameof(Name)}: {Name}, {nameof(Price)}: {Price}";
+        }
     }
 }
