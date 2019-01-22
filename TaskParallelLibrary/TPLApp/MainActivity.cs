@@ -63,7 +63,7 @@ namespace TPLApp
 	        var awaiter = task.GetAwaiter();
             awaiter.OnCompleted(() =>
             {
-                x = ??
+                Console.WriteLine($"X is {x}");
                 var result = awaiter.GetResult();
                 _textView.Text = $"Result from GetAwaiter: \nThere is {result} of prime numbers \nin range from 2 to 300000";
             });
@@ -80,13 +80,28 @@ namespace TPLApp
 
 	    private async void OnClickAsyncButton(object sender, EventArgs e)
 	    {
-	        var result = await Task.Run(() => PrimeNumber());
-	        _textView.Text =
-	            $"Result from async: \nThere is {result} of prime numbers \nin range from 2 to 300000";
+            //var result = await Task.Run(() => PrimeNumber());
+            //_textView.Text =
+            //    $"Result from async: \nThere is {result} of prime numbers \nin range from 2 to 300000";
 
-	    }
+           await Task.Run(async () =>
+            {
+                Console.WriteLine("0");
+                await SomeAsync();
+                Console.WriteLine("3");
+            });
 
-	    private int PrimeNumber()
+        }
+
+        private static async Task SomeAsync()
+        {
+            await Task.Delay(TimeSpan.FromMilliseconds(500));
+            Console.WriteLine("1");
+            await Task.Delay(TimeSpan.FromMilliseconds(500));
+            Console.WriteLine("2");
+        }
+
+        private int PrimeNumber()
 	    {
 	        return Enumerable.Range(2, 300000).Count(number =>
 	            Enumerable.Range(2, (int) Math.Sqrt(number) - 1).All(i => number % i > 0));
