@@ -64,6 +64,13 @@ namespace TaskParallelLibrary
             //var sb = new StringBuilder();
             //sb.Append()
 
+            TestUserWithDevices();
+
+            Console.ReadKey();
+        }
+
+        private static void TestUserWithDevices()
+        {
             var threads = new List<Thread>();
             var user = new User("Jacek", new ImmutableDevice("Nokia", 30),
                 new MutableDevice {Name = "Samsung", Price = 50});
@@ -81,9 +88,6 @@ namespace TaskParallelLibrary
             }
 
             threads.ForEach(t => t.Start());
-
-            Console.ReadKey();
-
         }
 
         private static Task ExceptionMethod()
