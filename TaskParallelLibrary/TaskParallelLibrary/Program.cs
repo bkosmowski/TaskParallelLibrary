@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TaskParallelLibrary.Enumerable;
 using TaskParallelLibrary.Immutable;
+using TaskParallelLibrary.Query;
 
 namespace TaskParallelLibrary
 {
@@ -64,9 +68,44 @@ namespace TaskParallelLibrary
             //var sb = new StringBuilder();
             //sb.Append()
 
-            TestUserWithDevices();
+            //TestUserWithDevices();
 
-            Console.ReadKey();
+
+            
+            //    try
+            //    {
+            //        throw new Exception();
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        throw;
+            //    }
+            //    finally
+            //    {
+            //        Console.WriteLine("Finally");
+            //    }
+           
+
+
+            //var now = DateTimeOffset.Now;
+
+            //var s = now.ToString("HH:mm dd/MM/yy");
+
+            //Console.ReadKey();
+
+            var simpleQuery = new SimpleQuery<int>();
+
+            var query = from x in simpleQuery where x > 5 select x * 10;
+        }
+
+        private static void TestSimpleEnumerable()
+        {
+            var simpleEnumerable = new SimpleEnumerable();
+
+            foreach (var temp in simpleEnumerable)
+            {
+                Console.WriteLine(temp);
+            }
         }
 
         private static void TestUserWithDevices()
