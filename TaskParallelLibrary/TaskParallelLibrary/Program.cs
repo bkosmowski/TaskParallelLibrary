@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using TaskParallelLibrary.Enumerable;
@@ -71,7 +69,7 @@ namespace TaskParallelLibrary
             //TestUserWithDevices();
 
 
-            
+
             //    try
             //    {
             //        throw new Exception();
@@ -84,7 +82,7 @@ namespace TaskParallelLibrary
             //    {
             //        Console.WriteLine("Finally");
             //    }
-           
+
 
 
             //var now = DateTimeOffset.Now;
@@ -93,6 +91,34 @@ namespace TaskParallelLibrary
 
             //Console.ReadKey();
 
+            //var simpleQuery = new SimpleQuery<int>();
+
+            //var query = from x in simpleQuery where x > 5 select x * 10;
+
+            TestSimpleQuery();
+            Console.ReadKey();
+        }
+
+        private async Task TestAwaitable()
+        {
+            var awaitable = new Awaitable();
+
+            await awaitable;
+        }
+
+        class Awaitable : INotifyCompletion
+        {
+            public Awaitable GetAwaiter() => throw new NotImplementedException();
+
+            public void OnCompleted(Action continuation) => throw new NotImplementedException();
+
+            public bool IsCompleted { get; }
+
+            public int GetResult() => throw new NotImplementedException();
+        }
+
+        private static void TestSimpleQuery()
+        {
             var simpleQuery = new SimpleQuery<int>();
 
             var query = from x in simpleQuery where x > 5 select x * 10;
@@ -102,10 +128,7 @@ namespace TaskParallelLibrary
         {
             var simpleEnumerable = new SimpleEnumerable();
 
-            foreach (var temp in simpleEnumerable)
-            {
-                Console.WriteLine(temp);
-            }
+            foreach (var temp in simpleEnumerable) Console.WriteLine(temp);
         }
 
         private static void TestUserWithDevices()
@@ -113,8 +136,7 @@ namespace TaskParallelLibrary
             var threads = new List<Thread>();
             var user = new User("Jacek", new ImmutableDevice("Nokia", 30),
                 new MutableDevice {Name = "Samsung", Price = 50});
-
-
+            
             for (var index = 0; index < 10; index++)
             {
                 threads.Add(new Thread(() =>
