@@ -1,111 +1,32 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Android.App;
+﻿using Android.App;
 using Android.OS;
 using Android.Support.V7.App;
 using Android.Widget;
 
 namespace TPLApp
 {
-	[Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true)]
-	public class MainActivity : AppCompatActivity
-	{
-	    private Button _getAwaiterButton;
-	    private Button _continueWithButton;
-	    private Button _asyncButton;
-	    private Button _syncContextButton;
-	    private TextView _textView;
+    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true)]
+    public class MainActivity : AppCompatActivity
+    {
+        private NumberPicker _hoursPicker;
+        private NumberPicker _minutesPicker;
+        private NumberPicker _secondsPicker;
 
-	    private SynchronizationContext _uiSyncContext;
-
-		protected override void OnCreate(Bundle savedInstanceState)
-		{
-			base.OnCreate(savedInstanceState);
-
-			SetContentView(Resource.Layout.activity_main);
-            _uiSyncContext = SynchronizationContext.Current;
-
-		    _getAwaiterButton = FindViewById<Button>(Resource.Id.GetAwaiterButton);
-		    _continueWithButton = FindViewById<Button>(Resource.Id.ContinueWithButton);
-		    _asyncButton = FindViewById<Button>(Resource.Id.AsyncButton);
-		    _syncContextButton = FindViewById<Button>(Resource.Id.SyncContextButton);
-		    _textView = FindViewById<TextView>(Resource.Id.TextView);
-
-		    _syncContextButton.Click += OnClickSyncContextButton;
-		    _getAwaiterButton.Click += OnClickGetAwaiterButton;
-		    _continueWithButton.Click += OnClickContinueWithButton;
-            _asyncButton.Click += OnClickAsyncButton;
-		}
-
-	    private void OnClickSyncContextButton(object sender, EventArgs e)
+        protected override void OnCreate(Bundle savedInstanceState)
         {
-            for (int i = 0; i < 10; i++)
-            {
-                Task.Run(() =>
-                {
-                    Console.WriteLine(i);
-                });
-            }            
+            base.OnCreate(savedInstanceState);
+
+            SetContentView(Resource.Layout.activity_main);
+            _hoursPicker = FindViewById<NumberPicker>(Resource.Id.hoursPicker);
+            _hoursPicker.MinValue = 0;
+            _hoursPicker.MaxValue = 12;
+
+            _minutesPicker = FindViewById<NumberPicker>(Resource.Id.minutesPicker);
+            _minutesPicker.MinValue = 0;
+            _minutesPicker.MaxValue = 60;
+            _secondsPicker = FindViewById<NumberPicker>(Resource.Id.secondsPicker);
+            _secondsPicker.MinValue = 0;
+            _secondsPicker.MaxValue = 60;
         }
-
-	    private void OnClickGetAwaiterButton(object sender, EventArgs e)
-        {
-            var x = 1;
-	        var task = Task.Run(() =>
-            {
-                x = 2;
-                return PrimeNumber();
-                
-            });
-            x = 3;
-	        var awaiter = task.GetAwaiter();
-            awaiter.OnCompleted(() =>
-            {
-                Console.WriteLine($"X is {x}");
-                var result = awaiter.GetResult();
-                _textView.Text = $"Result from GetAwaiter: \nThere is {result} of prime numbers \nin range from 2 to 300000";
-            });
-	    }
-
-	    private void OnClickContinueWithButton(object sender, EventArgs e)
-	    {
-	        var task = Task.Run(() => PrimeNumber());
-	        task.ContinueWith(
-	            continuationTask => _textView.Text =
-	                $"Result from ContinueWith: \nThere is {continuationTask.Result} of prime numbers \nin range from 2 to 300000",
-	            TaskScheduler.FromCurrentSynchronizationContext());
-	    }
-
-	    private async void OnClickAsyncButton(object sender, EventArgs e)
-	    {
-            //var result = await Task.Run(() => PrimeNumber());
-            //_textView.Text =
-            //    $"Result from async: \nThere is {result} of prime numbers \nin range from 2 to 300000";
-
-           await Task.Run(async () =>
-            {
-                Console.WriteLine("0");
-                await SomeAsync();
-                Console.WriteLine("3");
-            });
-
-        }
-
-        private static async Task SomeAsync()
-        {
-            await Task.Delay(TimeSpan.FromMilliseconds(500));
-            Console.WriteLine("1");
-            await Task.Delay(TimeSpan.FromMilliseconds(500));
-            Console.WriteLine("2");
-        }
-
-        private int PrimeNumber()
-	    {
-	        return Enumerable.Range(2, 300000).Count(number =>
-	            Enumerable.Range(2, (int) Math.Sqrt(number) - 1).All(i => number % i > 0));
-	    }
-	}
+    }
 }
-
